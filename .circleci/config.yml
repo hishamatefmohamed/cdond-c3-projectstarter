@@ -242,8 +242,7 @@ jobs:
           command: |
             # your code here
       # Here's where you will add some code to rollback on failure  
-
-  cleanup:
+cleanup:
     docker:
       # Docker image here
     steps:
