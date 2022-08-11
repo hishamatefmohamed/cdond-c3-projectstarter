@@ -73,6 +73,7 @@ jobs:
     docker:
       - image: circleci/node:13.8.0
     steps:
+      - checkout
       - run:
           name: front-end build
           command: |
@@ -88,6 +89,7 @@ jobs:
       - image: circleci/node:13.8.0
     steps:
       # Checkout code from git
+      - checkout
       - restore_cache:
             key: backend-build
       - run:
