@@ -108,7 +108,7 @@ jobs:
       # Restore from cache
       # - restore_cache:
       #   key: 
-      - run :
+      - run:
         command : |
           cd frontend
           npm install
@@ -123,7 +123,7 @@ jobs:
       - checkout
       # Restore from cache
       # Your job code here
-      - run :
+      - run:
         command : |
           cd frontend
           npm install
