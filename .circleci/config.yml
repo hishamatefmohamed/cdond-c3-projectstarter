@@ -109,7 +109,7 @@ jobs:
       # - restore_cache:
       #   key: 
       - run:
-        command : |
+         command : |
           cd frontend
           npm install
         # npm install oauth-sign@^0.9.0
@@ -124,7 +124,7 @@ jobs:
       # Restore from cache
       # Your job code here
       - run:
-        command : |
+         command : |
           cd frontend
           npm install
         # npm install oauth-sign@^0.9.0
