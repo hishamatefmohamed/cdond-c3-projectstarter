@@ -75,10 +75,10 @@ jobs:
     steps:
       - run:
           name: front-end build
-              command: |
-                cd frontend
-                npm install
-                npm run test
+          command: |
+            cd frontend
+            npm install
+            npm run test
       - restore_cache:
             key: frontend-build
       # Your job code here
@@ -92,10 +92,10 @@ jobs:
             key: backend-build
       - run:
           name: Back-end build
-              command: |
-                cd backend
-                npm install
-                npm run test
+          command: |
+            cd backend
+            npm install
+            npm run test
             
   # scan-frontend:
   #   docker:
