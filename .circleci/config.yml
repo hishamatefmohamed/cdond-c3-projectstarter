@@ -75,13 +75,13 @@ jobs:
     steps:
       - checkout
       - run:
-          name: front-end build
+          name: front-end test
           command: |
             cd frontend
             npm install
             npm run test
       - restore_cache:
-            key: frontend-build
+            key: frontend-test
       # Your job code here
                 
   test-backend:
@@ -91,29 +91,44 @@ jobs:
       # Checkout code from git
       - checkout
       - restore_cache:
-            key: backend-build
+            key: backend-test
       - run:
-          name: Back-end build
+          name: Back-end test
           command: |
             cd backend
             npm install
             npm run test
             
-  # scan-frontend:
-  #   docker:
-  #     # Docker image here
-  #   steps:
-  #     # Checkout code from git
-  #     # Restore from cache
-  #     # Your job code here
+  scan-frontend:
+    docker:
+       - image: circleci/node:13.8.0
+    steps:
+       # Checkout code from git
+      - checkout
+      # Restore from cache
+      # - restore_cache:
+      #   key: 
+      - run :
+        command : |
+          cd frontend
+          npm install
+        # npm install oauth-sign@^0.9.0
+          npm audit --audit-level=critical
 
-  # scan-backend:
-  #   docker:
-  #     # Docker image here
-  #   steps:
-  #     # Checkout code from git
-  #     # Restore from cache
-  #     # Your job code here
+  scan-backend:
+    docker:
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      # Restore from cache
+      # Your job code here
+      - run :
+        command : |
+          cd frontend
+          npm install
+        # npm install oauth-sign@^0.9.0
+          npm audit --audit-level=critical
 
 #   deploy-infrastructure:
 #     docker:
