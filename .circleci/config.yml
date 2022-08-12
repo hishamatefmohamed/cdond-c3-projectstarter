@@ -105,7 +105,7 @@ jobs:
     steps:
        # Checkout code from git
       - checkout 
-      - run:
+      - run: 
           name: scan-frontend
           command: |
                cd frontend
@@ -119,9 +119,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
-      # Restore from cache
-      # Your job code here
-      - run:
+      - run: 
+        name: scan-backend
         command: |
           cd frontend
           npm install
