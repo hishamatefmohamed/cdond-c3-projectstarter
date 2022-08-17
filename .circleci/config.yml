@@ -130,42 +130,100 @@ jobs:
             npm audit fix 
             npm audit fix --force
             npm audit --audit-level=critical
-            
-
-  deploy-infrastructure:
+    deploy_backend_infrastructure:
     docker:
       - image: amazon/aws-cli
     steps:
-      # Checkout code from git
       - checkout
       - run:
-          name: Ensure back-end infrastructure exists
+          name: Deploy the backend infrastructure using cloudformation
           command: |
             aws cloudformation deploy \
-              --template-file .circleci/files/backend.yml \
-              --tags project=your-tag \
-              --stack-name udapeople-backend- \
-              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
-              exit 1
+              --template-file .circleci/cloudformation/backend_infrastructure.yml \
+              --parameter-overrides ID="prod-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --stack-name udapeople-backend-prod-${CIRCLE_WORKFLOW_ID:0:7}
       - run:
-          name: Ensure front-end infrastructure exist
+          name: Save backend URL and IP (for ansible)
           command: |
-            aws cloudformation deploy \
-              --template-file .circleci/files/frontend.yml \
-              --tags project=your-tag \
-              --stack-name udapeople-frontend \
-              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
-              exit 1
-      - run:
-          name: Add back-end ip to ansible inventory
-          command: |
-            # Your code here
-            exit 1
+            BACKEND_AWS_PUBLIC_IP=$(aws ec2 describe-instances \
+              --filters "Name=tag:Name,Values=backend-prod-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text)
+            echo "http://$BACKEND_AWS_PUBLIC_IP:3030" >> .circleci/outputs/backend_url.txt
+            echo "[all]" >> .circleci/ansible/inventory.txt
+            echo "$BACKEND_AWS_PUBLIC_IP" >> .circleci/ansible/inventory.txt
+            cat .circleci/outputs/backend_url.txt
+      - run: yum -y install tar gzip
       - persist_to_workspace:
           root: ~/
           paths:
+            - project/.circleci/outputs/backend_url.txt
             - project/.circleci/ansible/inventory.txt
-      # Here's where you will add some code to rollback on failure      
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+
+  deploy_frontend_infrastructure:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Deploy the frontend infrastructure using cloudformation
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/cloudformation/frontend_infrastructure.yml \
+              --parameter-overrides ID="prod-${CIRCLE_WORKFLOW_ID:0:7}" \
+              --stack-name udapeople-frontend-prod-${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy_environment:
+          workflow_id: "${CIRCLE_WORKFLOW_ID:0:7}"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  # deploy-infrastructure:
+  #   docker:
+  #     - image: amazon/aws-cli
+  #   steps:
+  #     # Checkout code from git
+  #     - checkout
+  #     - run:
+  #         name: Ensure back-end infrastructure exists
+  #         command: |
+  #           aws cloudformation deploy \
+  #             --template-file .circleci/files/backend.yml \
+  #             --tags project=your-tag \
+  #             --stack-name udapeople-backend- \
+  #             --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
+  #             exit 1
+  #     - run:
+  #         name: Ensure front-end infrastructure exist
+  #         command: |
+  #           aws cloudformation deploy \
+  #             --template-file .circleci/files/frontend.yml \
+  #             --tags project=your-tag \
+  #             --stack-name udapeople-frontend \
+  #             --parameter-overrides ID=${CIRCLE_WORKFLOW_ID:0:7}
+  #             exit 1
+  #     - run:
+  #         name: Add back-end ip to ansible inventory
+  #         command: |
+  #           # Your code here
+  #           exit 1
+  #     - persist_to_workspace:
+  #         root: ~/
+  #         paths:
+  #           - project/.circleci/ansible/inventory.txt
+  #     # Here's where you will add some code to rollback on failure      
 
 #   configure-infrastructure:
 #     docker:
