@@ -144,7 +144,7 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/backend.yml \
               #--tags project=your-tag \
-              # --stack-name "your back-end stack name with workflow id" \
+              # --stack-name "udapeople-backend-" \
               # --parameter-overrides ID="your workflow id"  
               exit 1
       - run:
@@ -153,7 +153,7 @@ jobs:
             aws cloudformation deploy \
               --template-file .circleci/files/frontend.yml \
               #--tags project=your-tag \
-              # --stack-name "your front-end stack name with workflow id" \
+              # --stack-name "udapeople-frontend" \
               # --parameter-overrides ID="your workflow id"  
               exit 1
       - run:
