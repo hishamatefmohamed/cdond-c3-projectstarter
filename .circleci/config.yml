@@ -165,6 +165,7 @@ jobs:
             BACKEND_AWS_PUBLIC_IP=$(aws ec2 describe-instances \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
+            yum -y install tar gzip
             echo "http://$BACKEND_AWS_PUBLIC_IP:3030"
             echo "[all]" >> .circleci/ansible/inventory.txt
             echo "$BACKEND_AWS_PUBLIC_IP" >> .circleci/ansible/inventory.txt
