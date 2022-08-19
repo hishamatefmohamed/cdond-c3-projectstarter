@@ -184,9 +184,10 @@ jobs:
       - checkout
       # Add ssh keys with fingerprint
       # attach workspace
-      # - run:
-      #     name: Install dependencies
-      #     command: |
+      - run:
+          name: Install dependencies
+          command: |
+             yum -y install ansible
             
       - run:
           name: Configure server
