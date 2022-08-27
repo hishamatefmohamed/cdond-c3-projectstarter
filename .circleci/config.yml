@@ -194,9 +194,8 @@ jobs:
             yum install -y python3-pip; \
             yum install -y wget; \
             yum clean all; \
-            Echo "update yum **************************************** start";\
-            yum update pip3 ;\
-            Echo "update yum **************************************** end"
+            yum update pip3 
+            
 
             pip3 install --upgrade pip; \
             pip3 install --upgrade virtualenv; \
