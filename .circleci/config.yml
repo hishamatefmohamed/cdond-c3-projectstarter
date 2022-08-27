@@ -201,7 +201,6 @@ jobs:
             pip3 install --upgrade virtualenv; \
             pip3 install pywinrm; \
             pip3 install pywinrm; \
-            pip3 install jmspath==1.0.1; \
             pip3 install requests; \
             python3 -m pip install ansible; \
             ansible-galaxy collection install azure.azcollection; \
