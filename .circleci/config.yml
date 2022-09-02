@@ -144,7 +144,7 @@ jobs:
       # Checkout code from git
     steps:
       - checkout
-      - install_awscli
+      
       - run:
           name: Ensure back-end infrastructure exists
           command: |
